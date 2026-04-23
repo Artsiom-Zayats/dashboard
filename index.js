@@ -20,6 +20,38 @@ function burgerMenu(){
   } )
 }
 
+function selectPage(){
+    const selectProject = document.getElementById('projects');
+    const selectEmployees = document.getElementById('employees');
+    const projectsPage = document.querySelector('.projects-page');
+    const projectsEmployees = document.querySelector('.employees-page');
+    
+    
+    selectProject.addEventListener('click',() =>{
+        if(projectsPage.classList.contains('hidden')){
+            projectsEmployees.classList.add('hidden');
+            projectsPage.classList.remove('hidden');
+            selectProject.classList.add('list-pages-head-active');
+            selectEmployees.classList.remove('list-pages-head-active');
+        }
+    } )
+
+    selectEmployees.addEventListener('click',() =>{
+        if(projectsEmployees.classList.contains('hidden')){
+            projectsPage.classList.add('hidden');
+            projectsEmployees.classList.remove('hidden');
+            selectEmployees.classList.add('list-pages-head-active');
+            selectProject.classList.remove('list-pages-head-active');
+        }
+    } )
+}
+
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
   burgerMenu();
+  selectPage();
 });

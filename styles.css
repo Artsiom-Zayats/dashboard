@@ -255,7 +255,7 @@ main{
 }
 
 .hidden{
-    visibility: hidden;
+    display: none;
     
 }
 
@@ -337,6 +337,7 @@ main{
     font-size: 24px;
     line-height: 1.52;
     letter-spacing: 0.18em;
+    cursor: pointer;
 }
 
 .list-pages-head:active{
@@ -345,6 +346,15 @@ main{
     color: blueviolet ;
     
 }
+
+
+.list-pages-head-active{
+    background-color: rgb(127, 104, 148);
+    border-left: 3px solid rgb(138, 43, 226) ;
+    color: blueviolet ;
+    
+}
+
 
 .list-pages-head a{
   transition: color 0.5s ease;  
