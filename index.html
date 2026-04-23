@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard project</title>
+    <script src="./index.js"></script>
+    <link rel="icon" type="image/svg+xml" href="./images/gift-for-harmony.png">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <header></header>
+    <main>
+        <button class="burger-button hidden"></button>
+        <h1 style="display: none;">Employee & Project Dashboard</h1>
+        <div class="burger-menu">
+            <h2 style="display: none;">Side menu</h2>
+            <button class="menu-button"></button>
+            <div class="period-selector">
+                <h3>Period</h3>
+                <select name="month-select" id="month-select" class="month-select">
+                    <option value="0">January</option>
+                    <option value="1">February</option>
+                    <option value="2">March</option>
+                    <option value="3">April</option>
+                    <option value="4">May</option>
+                    <option value="5">June</option>
+                    <option value="6">July</option>
+                    <option value="7">August</option>
+                    <option value="8">September</option>
+                    <option value="9">October</option>
+                    <option value="10">November</option>
+                    <option value="11">December</option>
+                </select>
+                <select name="year-select" id="year-select" class="year-select">
+                    <option value="2025">2025</option>
+                    <option value="2026" selected>2026</option>
+                    <option value="2027">2027</option>
+                </select>
+            </div>
+            <nav class="nav-menu">
+                <ul class="list-pages">
+                    <li class="list-pages-head"><a href="#">Projets</a></li>
+                    <li class="list-pages-head"><a href="#">Employees</a></li>
+                </ul>
+            </nav>
+        </div>
+        <section class="main-content">
+            <div class="projects-page">
+                <div class="content-container">
+                    <div class="container-top">
+                        <div class="header-container"><h2 class="content-header">Projects</h2></div>
+                        <div class="button-contaier">
+                            <button class="button-add">+Add Project</button>
+                            <button class="button-seed-data">Seed Data</button>
+                        </div>
+                    </div>
+                    <table class="projects-tab">
+                        <thead class="projects-thead">
+                            <tr>
+                                <th class="sort" scope="col">
+                                    <div class="temp">
+                                        <span class="sort-name">Company Name</span>
+                                        <span class="sort-vertical"></span>
+                                        <span class="filter"></span>
+                                    </div>
+                                    
+                                </th>
+                                <th class="sort" scope="col">
+                                     <div class="temp">
+                                        <span class="sort-name">Project Name</span>
+                                        <span class="sort-vertical"></span>
+                                        <span class="filter"></span>
+                                    </div>
+                                </th>
+                                <th class="sort" scope="col">
+                                    <div class="temp">
+                                        <span class="sort-name">Budget</span>
+                                        <span class="sort-vertical"></span>
+                                        
+                                    </div>
+                                </th>
+                                <th class="sort" scope="col">
+                                    <div class="temp">
+                                        <span class="sort-name">Employee Capacity</span>
+                                        <span class="sort-vertical"></span>
+                                        
+                                    </div>
+                                </th>
+                                <th class="sort" scope="col">
+                                    <span class="sort-name">Employees</span>
+                                </th>
+                                <th class="sort" scope="col">
+                                    <div class="temp">
+                                        <span class="sort-name">Estimated Income</span>
+                                        <span class="sort-vertical"></span>
+                                        
+                                    </div>
+                                </th>
+                                <th class="sort" scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="projects-tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="employees-page">
+                <div class="content-container">
+                    <div class="container-top">
+                        <div class="header-container"><h2 class="content-header">Employees</h2></div>
+                        <div class="button-contaier">
+                            <button class="button-add">+ Add Employee</button>
+                            
+                        </div>
+                    </div>
+                    <table class="employees-tab">
+                        <thead class="employees-thead">
+                            <tr>
+                                <th class="sort" scope="col">
+                                     <div class="temp">
+                                        <span class="sort-name">Name</span>
+                                        <span class="sort-vertical"></span>
+                                        <span class="filter"></span>
+                                    </div>
+                                </th>
+                                <th class="sort" scope="col">
+                                     <div class="temp">
+                                        <span class="sort-name">Surname</span>
+                                        <span class="sort-vertical"></span>
+                                        <span class="filter"></span>
+                                    </div>
+                                </th>
+                                <th class="sort" scope="col">
+                                    <div class="temp">
+                                        <span class="sort-name">Age</span>
+                                        <span class="sort-vertical"></span>
+                                        
+                                    </div>
+                                </th>
+                                <th class="sort" scope="col">
+                                     <div class="temp">
+                                        <span class="sort-name">Position</span>
+                                        <span class="sort-vertical"></span>
+                                        <span class="filter"></span>
+                                    </div>
+                                </th>
+                                <th class="sort" scope="col">
+                                    <div class="temp">
+                                        <span class="sort-name">Salary</span>
+                                        <span class="sort-vertical"></span>
+                                        
+                                    </div>
+                                </th>
+                                <th class="sort" scope="col">
+                                    <div class="temp">
+                                        <span class="sort-name">Estimated Payment</span>
+                                        <span class="sort-vertical"></span>
+                                        
+                                    </div>
+                                </th>
+                                <th class="sort" scope="col">
+                                     <div class="temp">
+                                        <span class="sort-name">Project</span>
+                                        <span class="sort-vertical"></span>
+                                        <span class="filter"></span>
+                                    </div>
+                                </th>
+                                <th class="sort" scope="col">
+                                    <div class="temp">
+                                        <span class="sort-name">Projected Income</span>
+                                        <span class="sort-vertical"></span>
+                                        
+                                    </div>
+                                </th>
+                                <th class="sort" scope="col">
+                                    <span class="sort-name">Actions</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="employees-tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer></footer>
+</body>
+</html>
