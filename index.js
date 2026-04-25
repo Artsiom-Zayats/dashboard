@@ -47,11 +47,41 @@ function selectPage(){
 }
 
 
+function openSidePanel(){
+    const addProject = document.getElementById('add-project');
+    const addEmployee = document.getElementById('add-employee');
+    const sideProjet = document.querySelector('.add-project-side');
+    const sideEmployee = document.querySelector('.add-employee-side');
+
+    addProject.addEventListener('click', ()=>{
+        sideProjet.classList.remove('hidden-side');
+    })
+
+    addEmployee.addEventListener('click', ()=>{
+        sideEmployee.classList.remove('hidden-side');
+    })
 
 
+}
 
+function closeSidePanel(){
+    const sideProjet = document.querySelector('.add-project-side');
+    const sideEmployee = document.querySelector('.add-employee-side');
+    const closeProject = document.getElementById('cancel-add-project');
+    const closeEmployee = document.getElementById('cancel-add-employee');
+
+    closeProject.addEventListener('click', ()=>{
+        sideProjet.classList.add('hidden-side');
+    })
+
+    closeEmployee.addEventListener('click', ()=>{
+        sideEmployee.classList.add('hidden-side');
+    })
+}
 
 document.addEventListener('DOMContentLoaded', function() {
   burgerMenu();
   selectPage();
+  openSidePanel();
+  closeSidePanel();
 });

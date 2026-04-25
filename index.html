@@ -51,7 +51,7 @@
                     <div class="container-top">
                         <div class="header-container"><h2 class="content-header">Projects</h2></div>
                         <div class="button-contaier">
-                            <button class="button-add">+Add Project</button>
+                            <button class="button-add" id="add-project">+Add Project</button>
                             <button class="button-seed-data">Seed Data</button>
                         </div>
                     </div>
@@ -105,13 +105,30 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="add-project-side hidden-side">
+                    <h3 class="project-side-header">Add New Project</h3>
+                    <form action="" class="project-side-input-form">
+                        <label for="project-name" class="label-header">Project Name: *</label>
+                        <input type="text" id="project-name" class="input-label">
+                        <label for="company-name" class="label-header">Company Name: *</label>
+                        <input type="text" id="company-name" class="input-label">
+                        <label for="budget" class="label-header">Budget: *</label>
+                        <input type="text" id="budget" class="input-label">
+                        <label for="employee-capacity" class="label-header">Employee Capacity: *</label>
+                        <input type="text" id="pemployee-capacity" class="input-label">
+                        <div class="project-side-form-conteiner-button">
+                            <button class="side-project-button-add">Add</button>
+                            <button class="side-project-button-cancel" id="cancel-add-project">Cancel</button>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="employees-page hidden">
                 <div class="content-container">
                     <div class="container-top">
                         <div class="header-container"><h2 class="content-header">Employees</h2></div>
                         <div class="button-contaier">
-                            <button class="button-add">+ Add Employee</button>
+                            <button class="button-add" id="add-employee">+ Add Employee</button>
                             
                         </div>
                     </div>
@@ -184,8 +201,38 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="add-employee-side hidden-side">
+                    <h3 class="employee-side-header">Add New Employee</h3>
+                    <form action="" class="employee-side-input-form">
+                        <label for="employee-name" class="label-header">Name: *</label>
+                        <input type="text" id="employee-name" class="input-label">
+                        <label for="employee-surname" class="label-header">Surname: *</label>
+                        <input type="text" id="employee-surname" class="input-label">
+                        <label for="employee-date-birth" class="label-header">Date of Birth: *</label>
+                        <input type="date" id="employee-date-birth" class="input-label">
+                        <label for="employee-position" class="label-header">Position: *</label>
+                         <select id="employee-position" name="position" required="">
+                            <option value="">Select position</option>
+                            <option value="Junior">Junior</option>
+                            <option value="Middle">Middle</option>
+                            <option value="Senior">Senior</option>
+                            <option value="Lead">Lead</option>
+                            <option value="Architect">Architect</option>
+                            <option value="BO">BO</option>
+                        </select>   
+                        <label for="employee-salary" class="label-header">Salary: *</label>
+                        <input type="text" id="employee-salary" class="input-label">
+                        
+                        <div class="project-side-form-conteiner-button">
+                            <button class="side-project-button-add">Add</button>
+                            <button class="side-project-button-cancel" id="cancel-add-employee">Cancel</button>
+                        </div>
+                    </form>
+                </div>
             </div>
+            
         </section>
+        
     </main>
     <footer></footer>
 </body>
