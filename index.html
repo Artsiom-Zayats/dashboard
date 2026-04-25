@@ -52,7 +52,7 @@
                         <div class="header-container"><h2 class="content-header">Projects</h2></div>
                         <div class="button-contaier">
                             <button class="button-add" id="add-project">+Add Project</button>
-                            <button class="button-seed-data">Seed Data</button>
+                            <button class="button-seed-data" id="seed-data">Seed Data</button>
                         </div>
                     </div>
                     <table class="projects-tab">
@@ -122,6 +122,7 @@
                         </div>
                     </form>
                 </div>
+                
             </div>
             <div class="employees-page hidden">
                 <div class="content-container">
@@ -232,7 +233,32 @@
             </div>
             
         </section>
-        
+        <div class="seed-dada-pop hidden-pop ">
+            <div class="popup-container">
+                <div class="seed-pop-top">
+                    <h3 class="seed-pop-header">Seed Data from Month</h3>
+                    <button class="seed-pop-close"></button>
+                </div>
+                <div class="seed-pop-bot">
+                    <p class="seed-pop-discription">
+                                Select a month to copy its data to the current month
+                                ( <span id="curent-month"></span> ):
+                                
+                    </p>
+                    <table id="seed-pop-tab">
+                        <thead>
+                            <th>Year</th>
+                            <th>Month</th>
+                            <th>Projects</th>
+                            <th>Employees</th>
+                            <th>Total Est. Income</th>
+                            <th>Action</th>
+                        </thead>
+                        <tbody></tbody>
+                            </table>
+                </div>
+            </div>
+        </div>
     </main>
     <footer></footer>
 </body>
