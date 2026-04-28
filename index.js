@@ -111,6 +111,156 @@ function closeSeedDataPopUp(){
 }
 
 
+
+//Реализация side панели добавления проектов
+let currentProjects = [];
+//ключ
+function getCurrentPeriodKey(){
+    const year = document.getElementById('year-select');
+    const month = document.getElementById('month-select');
+    return year.value+'-'+month.value;
+}
+
+
+//проверяем обекты 
+function checkData(){
+let monthlyData = localStorage.getItem('monthlyData');
+if (!monthlyData) {
+   
+    const emptyData = {};
+    
+    localStorage.setItem('monthlyData', JSON.stringify(emptyData));
+   
+} 
+}
+
+
+//Проверяем есть ли данные за определенный период и загружаем
+function loadDataForPeriod(periodKey){
+    const rawData = localStorage.getItem('monthlyData');
+    const data = JSON.parse(rawData);
+    if(!data[periodKey]){
+        data[periodKey] = { projects: [], employees: [] };
+        localStorage.setItem('monthlyData',JSON.stringify(data));
+    }
+    return data[periodKey];
+}
+
+//заполнение таблицы проектами
+
+function renderProjectsTable(projects){
+    const table = document.querySelector('.projects-tbody');
+    const template = document.getElementById('project-row-template');
+    table.innerHTML = '';
+    for(const project of projects){
+        const clone = template.content.cloneNode(true);
+        clone.querySelector('.company-name').textContent = project.company;
+        clone.querySelector('.project-name').textContent = project.name;
+        clone.querySelector('.budget').textContent = project.budget;
+        clone.querySelector('.employee-capacity').textContent = project.employeeCapacity;
+        clone.querySelector('.estimated-income').textContent = '0';
+        table.appendChild(clone);
+    }
+
+}
+
+
+//добавление проекат из формы
+function addProjectFromForm(){
+    const addButton = document.getElementById('add-button-project');
+    addButton.addEventListener('click', (e)=>{
+          e.preventDefault();
+
+           
+
+    
+
+    
+        const name = document.getElementById('project-name').value.trim();
+        const company = document.getElementById('company-name').value.trim();
+        const budget = parseFloat(document.getElementById('budget').value);
+        const employeeCapacity = parseInt(document.getElementById('employee-capacity').value,10);
+
+        showErrors({});
+        const errors = validateProjectForm(name, company, budget, employeeCapacity);
+        if (Object.keys(errors).length > 0) {
+            showErrors(errors);
+            return; 
+        }
+
+    const newProject = {
+        id: Date.now(),
+        name: name,
+        company: company,
+        budget: budget,
+        employeeCapacity: employeeCapacity,
+        employees: [] 
+    }
+
+    currentProjects.push(newProject);
+    saveCurrentPeriodData(currentProjects);
+    renderProjectsTable(currentProjects);
+
+    document.querySelector('.add-project-side').classList.add('hidden-side');
+    document.getElementById('project-name').value = '';
+    document.getElementById('company-name').value = '';
+    document.getElementById('budget').value = '';
+    document.getElementById('employee-capacity').value = '';
+    })
+    
+};
+    
+function saveCurrentPeriodData(projects) {
+    const periodKey = getCurrentPeriodKey();
+    const rawData = localStorage.getItem('monthlyData');
+    const allData = JSON.parse(rawData);
+    if (!allData[periodKey]) {
+        allData[periodKey] = { projects: [], employees: [] };
+    }
+    allData[periodKey].projects = projects;
+    localStorage.setItem('monthlyData', JSON.stringify(allData));
+}
+
+function validateProjectForm(name, company, budget, capacity) {
+    let errors = {};
+
+    if (!name || name.length < 3) {
+        errors.projectName = 'Project name must be at least 3 characters.';
+    } else if (!/^[a-zA-Z0-9\s]+$/.test(name)) {
+        errors.projectName = 'Only letters, numbers and spaces allowed.';
+    }
+
+    if (!company || company.length < 2) {
+        errors.companyName = 'Company name must be at least 2 characters.';
+    } else if (!/^[a-zA-Z0-9\s]+$/.test(company)) {
+        errors.companyName = 'Only letters, numbers and spaces allowed.';
+    }
+
+    if (isNaN(budget) || budget <= 0) {
+        errors.budget = 'Budget must be a positive number.';
+    } else if (!/^\d+(\.\d{1,2})?$/.test(budget.toString())) {
+        
+        errors.budget = 'Budget can have up to 2 decimal places.';
+    }
+
+    if (!Number.isInteger(capacity) || capacity < 1) {
+        errors.capacity = 'Employee capacity must be an integer >= 1.';
+    }
+
+    return errors;
+}
+
+function showErrors(errors) {
+    document.getElementById('project-name-error').textContent = errors.projectName || '';
+    document.getElementById('company-name-error').textContent = errors.companyName || '';
+    document.getElementById('project-budget-error').textContent = errors.budget || '';
+    document.getElementById('employee-capacity-error').textContent = errors.capacity || '';
+}
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
   burgerMenu();
   selectPage();
@@ -118,4 +268,11 @@ document.addEventListener('DOMContentLoaded', function() {
   closeSidePanel();
   openSeedDataPopUp();
   closeSeedDataPopUp();
+  checkData();  
+  const periodData = loadDataForPeriod(getCurrentPeriodKey());
+  currentProjects = periodData.projects;
+ 
+  renderProjectsTable(currentProjects);
+    addProjectFromForm()
+
 });

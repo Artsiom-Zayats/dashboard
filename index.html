@@ -34,7 +34,7 @@
                 </select>
                 <select name="year-select" id="year-select" class="year-select">
                     <option value="2025">2025</option>
-                    <option value="2026" selected>2026</option>
+                    <option value="2026">2026</option>
                     <option value="2027">2027</option>
                 </select>
             </div>
@@ -101,23 +101,42 @@
                             </tr>
                         </thead>
                         <tbody class="projects-tbody">
-
+                            
                         </tbody>
                     </table>
+                    <template id="project-row-template">
+                        <tr>
+                            <td class="company-name"></td>
+                            <td class="project-name"></td>
+                            <td class="budget"></td>
+                            <td class="employee-capacity"></td>
+                            <td><button class="show-employees">Show Employees</button></td>
+                            <td class="estimated-income"></td>
+                            <td><button class="delete-project">Delete</button></td>
+                        </tr>
+                    </template>
                 </div>
                 <div class="add-project-side hidden-side">
                     <h3 class="project-side-header">Add New Project</h3>
                     <form action="" class="project-side-input-form">
                         <label for="project-name" class="label-header">Project Name: *</label>
                         <input type="text" id="project-name" class="input-label">
+                        <span class="error-message" id="project-name-error"></span>
+
                         <label for="company-name" class="label-header">Company Name: *</label>
                         <input type="text" id="company-name" class="input-label">
+                        <span class="error-message" id="company-name-error"></span>
+
                         <label for="budget" class="label-header">Budget: *</label>
                         <input type="text" id="budget" class="input-label">
+                        <span class="error-message" id="project-budget-error"></span>
+
                         <label for="employee-capacity" class="label-header">Employee Capacity: *</label>
-                        <input type="text" id="pemployee-capacity" class="input-label">
+                        <input type="number" id="employee-capacity" class="input-label">
+                        <span class="error-message" id="employee-capacity-error"></span>
+
                         <div class="project-side-form-conteiner-button">
-                            <button class="side-project-button-add">Add</button>
+                            <button class="side-project-button-add" id="add-button-project">Add</button>
                             <button class="side-project-button-cancel" id="cancel-add-project">Cancel</button>
                         </div>
                     </form>
