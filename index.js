@@ -257,7 +257,21 @@ function showErrors(errors) {
     document.getElementById('employee-capacity-error').textContent = errors.capacity || '';
 }
 
+function changePeriod() {
+    const year = document.getElementById('year-select');
+    const month = document.getElementById('month-select');
 
+    function updateData() {
+        const periodKey = getCurrentPeriodKey();
+        const periodData = loadDataForPeriod(periodKey);
+        currentProjects = periodData.projects;
+        renderProjectsTable(currentProjects);
+        
+    }
+
+    year.addEventListener('change', updateData);
+    month.addEventListener('change', updateData);
+}
 
 
 
@@ -273,6 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
   currentProjects = periodData.projects;
  
   renderProjectsTable(currentProjects);
-    addProjectFromForm()
+    addProjectFromForm();
+    changePeriod() ;
 
 });
