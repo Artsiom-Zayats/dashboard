@@ -181,7 +181,7 @@ function renderEmployeesTable(employees){
 
         clone.querySelector('.employee-name').textContent = employee.name;
         clone.querySelector('.employee-surname').textContent = employee.surname;
-        clone.querySelector('.employee-age').textContent = '-';
+        clone.querySelector('.employee-age').textContent = ageEmployee(employee.dateOfBirth);
         clone.querySelector('.employee-position').textContent = employee.position;
         clone.querySelector('.employee-salary').textContent = employee.salary;
         clone.querySelector('.employee-estimated-payment').textContent = '0';
@@ -386,6 +386,23 @@ function deleteEmployee(){
     })
 }
 
+function ageEmployee(birthDate){
+    if(birthDate === ''){
+        return '-';
+    }
+    
+    const birth = new Date(birthDate);
+    const now = new Date();
+    let age = now.getFullYear() - birth.getFullYear();
+    const month = now.getMonth() - birth.getMonth();
+
+    if (month < 0 || (month === 0 && now.getDate() < birth.getDate())) {
+        age--;
+    }
+    
+    return age;
+
+}
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -407,4 +424,5 @@ document.addEventListener('DOMContentLoaded', function() {
     changePeriod() ;
     deleteProject();
      deleteEmployee();
+   
 });
