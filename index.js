@@ -152,6 +152,7 @@ function renderProjectsTable(projects){
     const table = document.querySelector('.projects-tbody');
     const template = document.getElementById('project-row-template');
     table.innerHTML = '';
+    
     for(const project of projects){
         const clone = template.content.cloneNode(true);
         clone.querySelector('.company-name').textContent = project.company;
@@ -159,6 +160,9 @@ function renderProjectsTable(projects){
         clone.querySelector('.budget').textContent = project.budget;
         clone.querySelector('.employee-capacity').textContent = project.employeeCapacity;
         clone.querySelector('.estimated-income').textContent = '0';
+
+        clone.querySelector('tr').setAttribute('data-id', project.id);
+
         table.appendChild(clone);
     }
 
@@ -274,6 +278,31 @@ function changePeriod() {
 }
 
 
+function deleteProject(){
+    const tBody = document.querySelector('.projects-tbody');
+    
+
+    tBody.addEventListener('click', (e) =>{
+        const deleteButton = e.target.closest('.delete-project');
+        if (!deleteButton){
+             return; 
+        }
+        const row = deleteButton.closest('tr');
+        const projectId = row.getAttribute('data-id');
+        
+        //удалим и изменим исходный массив обьектов
+        const index = currentProjects.findIndex(project => project.id == projectId);
+        if(index !== -1){
+            currentProjects.splice(index,1);
+        }
+        saveCurrentPeriodData(currentProjects);
+        renderProjectsTable(currentProjects);
+
+
+           
+    })
+}
+
 
 document.addEventListener('DOMContentLoaded', function() {
   burgerMenu();
@@ -289,5 +318,5 @@ document.addEventListener('DOMContentLoaded', function() {
   renderProjectsTable(currentProjects);
     addProjectFromForm();
     changePeriod() ;
-
+    deleteProject();
 });
