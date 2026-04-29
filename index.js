@@ -249,6 +249,12 @@ function addEmployeeFromForm(){
         const position = document.getElementById('employee-position').value;
         const salary = parseFloat(document.getElementById('employee-salary').value);
 
+        showEmployeeErrors({});
+        const errors = validateEmployeeForm(name, surname, dateOfBirth, position, salary);
+        if (Object.keys(errors).length > 0) {
+            showEmployeeErrors(errors);
+            return; 
+        }
 
 
         const newEmployee = {
@@ -318,11 +324,55 @@ function validateProjectForm(name, company, budget, capacity) {
     return errors;
 }
 
+function validateEmployeeForm(name, surname, dateOfBirth, position, salary){
+    let errors = {};
+
+    if (!name || name.length < 3) {
+        errors.name = 'Name must be at least 3 characters.';
+    } else if (!/^[a-zA-Z\s]+$/.test(name)) {
+        errors.name = 'Only letters and spaces allowed.';
+    }
+
+    if (!surname || surname.length < 2) {
+        errors.surname = 'Surname must be at least 3 characters and contain only letters.';
+    } else if (!/^[a-zA-Z\s]+$/.test(surname)) {
+        errors.surname = 'Only letters, numbers and spaces allowed.';
+    } 
+
+    if (!dateOfBirth){
+        errors.dateOfBirth = 'Date of birth is required.';
+    } else if (ageEmployee(dateOfBirth) === '-' || isNaN(ageEmployee(dateOfBirth))){
+        errors.dateOfBirth = 'Invalid date.';
+    } else if (ageEmployee(dateOfBirth)<18){
+        errors.dateOfBirth = 'Employee must be at least 18 years old.';
+    }
+
+    if (!position){
+        errors.position = 'Please select a position.';
+    }
+
+    if (salary === '' || isNaN(salary) || salary <= 0){
+        errors.salary = 'Salary must be a positive number.';
+    } else if (!/^\d+(\.\d{1,2})?$/.test(salary)){
+        errors.salary = 'Salary can have up to 2 decimal places.';
+    }
+
+    return errors;
+}
+
 function showErrors(errors) {
     document.getElementById('project-name-error').textContent = errors.projectName || '';
     document.getElementById('company-name-error').textContent = errors.companyName || '';
     document.getElementById('project-budget-error').textContent = errors.budget || '';
     document.getElementById('employee-capacity-error').textContent = errors.capacity || '';
+}
+
+function showEmployeeErrors(errors){
+    document.getElementById('employee-name-error').textContent = errors.name || '';
+    document.getElementById('employee-surname-error').textContent = errors.surname || '';
+    document.getElementById('employee-dob-error').textContent = errors.dateOfBirth || '';
+    document.getElementById('employee-position-error').textContent = errors.position || '';
+    document.getElementById('employee-salary-error').textContent = errors.salary || '';
 }
 
 function changePeriod() {
@@ -399,7 +449,7 @@ function ageEmployee(birthDate){
     if (month < 0 || (month === 0 && now.getDate() < birth.getDate())) {
         age--;
     }
-    
+
     return age;
 
 }

@@ -240,12 +240,19 @@
                 <div class="add-employee-side hidden-side">
                     <h3 class="employee-side-header">Add New Employee</h3>
                     <form action="" class="employee-side-input-form">
+
                         <label for="employee-name" class="label-header">Name: *</label>
                         <input type="text" id="employee-name" class="input-label">
+                        <span class="error-message" id="employee-name-error"></span>
+
                         <label for="employee-surname" class="label-header">Surname: *</label>
                         <input type="text" id="employee-surname" class="input-label">
+                        <span class="error-message" id="employee-surname-error"></span>
+
                         <label for="employee-date-birth" class="label-header">Date of Birth: *</label>
                         <input type="date" id="employee-date-birth" class="input-label">
+                        <span class="error-message" id="employee-dob-error"></span>
+
                         <label for="employee-position" class="label-header">Position: *</label>
                          <select id="employee-position" name="position" required="">
                             <option value="">Select position</option>
@@ -255,9 +262,12 @@
                             <option value="Lead">Lead</option>
                             <option value="Architect">Architect</option>
                             <option value="BO">BO</option>
-                        </select>   
+                        </select>
+                        <span class="error-message" id="employee-position-error"></span>
+
                         <label for="employee-salary" class="label-header">Salary: *</label>
                         <input type="text" id="employee-salary" class="input-label">
+                        <span class="error-message" id="employee-salary-error"></span>
                         
                         <div class="project-side-form-conteiner-button">
                             <button class="side-project-button-add" id="add-button-employee">Add</button>
