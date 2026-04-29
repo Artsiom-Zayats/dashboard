@@ -114,6 +114,7 @@ function closeSeedDataPopUp(){
 
 //Реализация side панели добавления проектов
 let currentProjects = [];
+let currentEmployees = [];
 //ключ
 function getCurrentPeriodKey(){
     const year = document.getElementById('year-select');
@@ -168,18 +169,37 @@ function renderProjectsTable(projects){
 
 }
 
+//заполнение таблицы сотрудников
+
+function renderEmployeesTable(employees){
+    const table = document.querySelector('.employees-tbody');
+    const tempalte = document.getElementById('employee-row-template');
+    table.innerHTML = '';
+
+    for(const employee of employees){
+        const clone = tempalte.content.cloneNode(true);
+
+        clone.querySelector('.employee-name').textContent = employee.name;
+        clone.querySelector('.employee-surname').textContent = employee.surname;
+        clone.querySelector('.employee-age').textContent = '-';
+        clone.querySelector('.employee-position').textContent = employee.position;
+        clone.querySelector('.employee-salary').textContent = employee.salary;
+        clone.querySelector('.employee-estimated-payment').textContent = '0';
+        clone.querySelector('.projected-income').textContent = '0';
+
+         clone.querySelector('tr').setAttribute('data-id', employee.id);
+
+         table.appendChild(clone);
+    }
+
+}
 
 //добавление проекат из формы
 function addProjectFromForm(){
     const addButton = document.getElementById('add-button-project');
     addButton.addEventListener('click', (e)=>{
           e.preventDefault();
-
-           
-
-    
-
-    
+        
         const name = document.getElementById('project-name').value.trim();
         const company = document.getElementById('company-name').value.trim();
         const budget = parseFloat(document.getElementById('budget').value);
@@ -198,11 +218,11 @@ function addProjectFromForm(){
         company: company,
         budget: budget,
         employeeCapacity: employeeCapacity,
-        employees: [] 
+        employees: []
     }
 
     currentProjects.push(newProject);
-    saveCurrentPeriodData(currentProjects);
+    saveCurrentPeriodData(currentProjects, currentEmployees);
     renderProjectsTable(currentProjects);
 
     document.querySelector('.add-project-side').classList.add('hidden-side');
@@ -213,8 +233,51 @@ function addProjectFromForm(){
     })
     
 };
+
+
+//добавление сотрудника из формы
+
+function addEmployeeFromForm(){
+    const addButton = document.getElementById('add-button-employee');
+
+    addButton.addEventListener('click', (e)=>{
+        e.preventDefault();
+
+        const name = document.getElementById('employee-name').value.trim();
+        const surname = document.getElementById('employee-surname').value.trim();
+        const dateOfBirth = document.getElementById('employee-date-birth').value;
+        const position = document.getElementById('employee-position').value;
+        const salary = parseFloat(document.getElementById('employee-salary').value);
+
+
+
+        const newEmployee = {
+            id: Date.now(),
+            name: name,
+            surname: surname,
+            dateOfBirth: dateOfBirth,
+            position: position,
+            salary: salary,
+            projects: [] 
+        }
+
+        currentEmployees.push(newEmployee);
+        saveCurrentPeriodData(currentProjects, currentEmployees);
+        renderEmployeesTable(currentEmployees);
+
+        document.querySelector('.add-employee-side').classList.add('hidden-side');
+        document.getElementById('employee-name').value = '';
+        document.getElementById('employee-surname').value = '';
+        document.getElementById('employee-date-birth').value = '';
+        document.getElementById('employee-position').value = '';
+        document.getElementById('employee-salary').value = '';
+    })
+}
+
+
+
     
-function saveCurrentPeriodData(projects) {
+function saveCurrentPeriodData(projects, employees) {
     const periodKey = getCurrentPeriodKey();
     const rawData = localStorage.getItem('monthlyData');
     const allData = JSON.parse(rawData);
@@ -222,6 +285,7 @@ function saveCurrentPeriodData(projects) {
         allData[periodKey] = { projects: [], employees: [] };
     }
     allData[periodKey].projects = projects;
+    allData[periodKey].employees = employees;
     localStorage.setItem('monthlyData', JSON.stringify(allData));
 }
 
@@ -269,8 +333,9 @@ function changePeriod() {
         const periodKey = getCurrentPeriodKey();
         const periodData = loadDataForPeriod(periodKey);
         currentProjects = periodData.projects;
+        currentEmployees = periodData.employees;
         renderProjectsTable(currentProjects);
-        
+        renderEmployeesTable(currentEmployees);
     }
 
     year.addEventListener('change', updateData);
@@ -281,7 +346,6 @@ function changePeriod() {
 function deleteProject(){
     const tBody = document.querySelector('.projects-tbody');
     
-
     tBody.addEventListener('click', (e) =>{
         const deleteButton = e.target.closest('.delete-project');
         if (!deleteButton){
@@ -295,13 +359,33 @@ function deleteProject(){
         if(index !== -1){
             currentProjects.splice(index,1);
         }
-        saveCurrentPeriodData(currentProjects);
+        saveCurrentPeriodData(currentProjects, currentEmployees);
         renderProjectsTable(currentProjects);
-
-
-           
+   
     })
 }
+
+
+function deleteEmployee(){
+    const tBody = document.querySelector('.employees-tbody');
+
+    tBody.addEventListener('click', (e) =>{
+        const deleteButton = e.target.closest('.delete-employee');
+        if(!deleteButton){
+            return;
+        }
+        const row = deleteButton.closest('tr');
+        const employeeId = row.getAttribute('data-id');
+
+        const index = currentEmployees.findIndex(employee => employee.id == employeeId);
+        if(index !== -1){
+            currentEmployees.splice(index,1);
+        }
+        saveCurrentPeriodData(currentProjects, currentEmployees);
+        renderEmployeesTable(currentEmployees);
+    })
+}
+
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -314,9 +398,13 @@ document.addEventListener('DOMContentLoaded', function() {
   checkData();  
   const periodData = loadDataForPeriod(getCurrentPeriodKey());
   currentProjects = periodData.projects;
- 
+  currentEmployees = periodData.employees;
+  renderEmployeesTable(currentEmployees);
+
   renderProjectsTable(currentProjects);
     addProjectFromForm();
+    addEmployeeFromForm();
     changePeriod() ;
     deleteProject();
+     deleteEmployee();
 });

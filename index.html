@@ -220,6 +220,22 @@
 
                         </tbody>
                     </table>
+                     <template id="employee-row-template">
+                        <tr>
+                            <td class="employee-name"></td>
+                            <td class="employee-surname"></td>
+                            <td class="employee-age"></td>
+                            <td class="employee-position"></td>
+                            <td class="employee-salary"></td>
+                            <td class="employee-estimated-payment"></td>
+                            <td><button class="show-assignments">Show Assignments</button></td>
+                            <td class="projected-income"></td>
+                            <td>
+                                <button class="availability-employee">Availability</button>
+                                <button class="assign-employee">Assign</button>
+                                <button class="delete-employee">Delete</button></td>
+                        </tr>
+                    </template>
                 </div>
                 <div class="add-employee-side hidden-side">
                     <h3 class="employee-side-header">Add New Employee</h3>
@@ -244,7 +260,7 @@
                         <input type="text" id="employee-salary" class="input-label">
                         
                         <div class="project-side-form-conteiner-button">
-                            <button class="side-project-button-add">Add</button>
+                            <button class="side-project-button-add" id="add-button-employee">Add</button>
                             <button class="side-project-button-cancel" id="cancel-add-employee">Cancel</button>
                         </div>
                     </form>
@@ -274,7 +290,7 @@
                             <th>Action</th>
                         </thead>
                         <tbody></tbody>
-                            </table>
+                    </table>
                 </div>
             </div>
         </div>
