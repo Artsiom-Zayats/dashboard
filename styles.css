@@ -422,8 +422,23 @@ td{
     background-color: rgb(243, 65, 0); 
 }
 
+#cancel-add-employee, #cancel-add-project, .delete-employee{
+  background-color: rgb(243, 65, 0); 
+}
+
+.side-project-button-add, .assign-employee{
+  background-color: greenyellow; 
+}
+
 .button-add, .button-seed-data{
     background-color: coral; 
+    
+    border-radius: 20px;
+    color:rgb(14, 103, 219);
+}
+
+button{
+  background-color: coral; 
     
     border-radius: 20px;
     color:rgb(14, 103, 219);
@@ -551,6 +566,7 @@ thead{
   border-radius: 5px;
   width: 24px;
 }
+
 .seed-pop-discription{
   padding-left: 10px;
 }
@@ -575,20 +591,72 @@ thead{
     justify-content: center;
     z-index: 1000;
 }
+
 .assign-popup-content {
     background: white;
     padding: 20px;
     border-radius: 10px;
     min-width: 300px;
 }
+
 .assign-form {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
+
 .assign-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
     margin-top: 20px;
 }
+
+#project-employees-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+}
+
+#project-employees-popup .popup-content {
+    background: white;
+    border-radius: 10px;
+    
+    
+    overflow: auto;
+    padding: 20px;
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close-popup-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.employees-in-project-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.employees-in-project-table th, .employees-in-project-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+

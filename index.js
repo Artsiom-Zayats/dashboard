@@ -162,8 +162,10 @@ function renderProjectsTable(projects){
         clone.querySelector('.budget').textContent = project.budget;
         clone.querySelector('.employee-capacity').textContent = project.employeeCapacity;
         clone.querySelector('.estimated-income').textContent = '0';
-
+        
         clone.querySelector('tr').setAttribute('data-id', project.id);
+
+        clone.querySelector('.show-employees').textContent = `Show Employees (${project.employees.length})`;
 
         table.appendChild(clone);
     }
@@ -550,6 +552,75 @@ function initAssignPopup(){
 });
 }
 
+
+function showEmployees(){
+    const tBodyProject = document.querySelector('.projects-tbody');
+
+    tBodyProject.addEventListener('click', (e) =>{
+        const showEmp = e.target.closest('.show-employees');
+        if (!showEmp) return;
+        
+        const row = showEmp.closest('tr');
+        const projectId = row.getAttribute('data-id');
+        const project = currentProjects.find(p => p.id === Number(projectId));
+        if (!project) return;
+
+        
+        const titleEl = document.getElementById('popup-project-title');
+        titleEl.textContent = `Employees in "${project.name}"`;
+
+        const assignments = project.employees;
+        const tBodyEmp = document.getElementById('project-employees-list');
+        const template = document.getElementById('project-employee-row-template');
+        tBodyEmp.innerHTML = '';
+
+        const assignedList = [];
+        assignments.forEach(assignment => {
+            const employee = currentEmployees.find(emp => emp.id == assignment.employeeId);
+            if (employee) assignedList.push({ employee, assignment });
+        });
+        assignedList.sort((a, b) => a.employee.name.localeCompare(b.employee.name));
+
+        if (assignedList.length === 0) {
+           
+            const emptyRow = document.createElement('tr');
+            emptyRow.innerHTML = `<td colspan="10" style="text-align:center;">No employees assigned to this project</td>`;
+            tBodyEmp.appendChild(emptyRow);
+        } else {
+            assignedList.forEach(({ employee, assignment }) => {
+                const clone = template.content.cloneNode(true);
+                clone.querySelector('.emp-name').textContent = employee.name;
+                clone.querySelector('.emp-surname').textContent = employee.surname;
+                clone.querySelector('.emp-capacity').textContent = assignment.capacity.toFixed(2);
+                clone.querySelector('.emp-fit').textContent = assignment.fit.toFixed(2);
+                
+                clone.querySelector('.emp-vacation').textContent = '-';
+                const effective = assignment.capacity * assignment.fit;
+                clone.querySelector('.emp-effective').textContent = effective.toFixed(3);
+                clone.querySelector('.emp-revenue').textContent = '0.00';
+                clone.querySelector('.emp-cost').textContent = '0.00';
+                clone.querySelector('.emp-profit').textContent = '0.00';
+                
+                tBodyEmp.appendChild(clone);
+            });
+        }
+        document.getElementById('project-employees-popup').classList.remove('hidden-pop');
+    });
+}
+
+function initEmployeesPopup() {
+    const popup = document.getElementById('project-employees-popup');
+    const closeBtn = document.getElementById('close-project-employees');
+
+    function closePopup() {
+        popup.classList.add('hidden-pop');
+    }
+    closeBtn.addEventListener('click', closePopup);
+    popup.addEventListener('click', (e) => {
+        if (e.target === popup) closePopup();
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   burgerMenu();
   selectPage();
@@ -571,4 +642,6 @@ document.addEventListener('DOMContentLoaded', function() {
      deleteEmployee();
      assignEmploye();
    initAssignPopup();
+    showEmployees();
+    initEmployeesPopup();
 });
