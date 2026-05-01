@@ -304,6 +304,31 @@
                 </div>
             </div>
         </div>
+        <div class="assign-popup hidden-pop" id="assign-popup">
+            <div class="assign-popup-content">
+                <h3>Assign Employee to Project</h3>
+                <div class="assign-form">
+                    <label>Project:</label>
+                    <select id="assign-project-select"></select>
+
+                    <label>Capacity (0.0 - 1.5):</label>
+                    <input type="range" id="assign-capacity" min="0" max="1.5" step="0.1" value="0">
+                    <span id="capacity-value">0.0</span>
+
+                    <label>Fit (0.0 - 1.0):</label>
+                    <input type="range" id="assign-fit" min="0" max="1" step="0.1" value="1">
+                    <span id="fit-value">1.0</span>
+
+                    <label>Effective Capacity:</label>
+                    <span id="effective-capacity">0.00</span>
+
+                    <div class="assign-buttons">
+                        <button id="assign-save">Save</button>
+                        <button id="assign-cancel">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
     <footer></footer>
 </body>

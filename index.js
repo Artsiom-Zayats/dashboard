@@ -115,6 +115,7 @@ function closeSeedDataPopUp(){
 //Реализация side панели добавления проектов
 let currentProjects = [];
 let currentEmployees = [];
+let assignEmployeeId = null;
 //ключ
 function getCurrentPeriodKey(){
     const year = document.getElementById('year-select');
@@ -455,6 +456,100 @@ function ageEmployee(birthDate){
 }
 
 
+function assignEmploye(){
+    const tBody = document.querySelector('.employees-tbody');
+    const popup = document.querySelector('.assign-popup');
+    tBody.addEventListener('click', (e) =>{
+        const assign = e.target.closest('.assign-employee');
+        if(!assign){
+            return;
+        }
+        const row = assign.closest('tr');
+        const employeeId = row.getAttribute('data-id');
+        const employee = currentEmployees.find(emp => emp.id == employeeId);
+        assignEmployeeId = employeeId;
+        const select = document.getElementById('assign-project-select');
+        select.innerHTML = '';
+
+        currentProjects.forEach(project=>{
+            const option = document.createElement('option');
+            option.value = project.id;
+
+            option.textContent = project.name;
+            select.appendChild(option);
+        })
+
+        popup.classList.remove('hidden-pop');
+     })
+}
+
+function initAssignPopup(){
+    const capacitySlider = document.getElementById('assign-capacity');
+    const fitSlider = document.getElementById('assign-fit');
+    const capacitySpan = document.getElementById('capacity-value');
+    const fitSpan = document.getElementById('fit-value');
+    const effectiveSpan = document.getElementById('effective-capacity');
+
+    function updateEffective(){
+        const cap = parseFloat(capacitySlider.value);
+        const fit = parseFloat(fitSlider.value);
+        capacitySpan.textContent = cap.toFixed(1);
+        fitSpan.textContent = fit.toFixed(1);
+        effectiveSpan.textContent = (cap * fit).toFixed(2);
+    }
+
+    capacitySlider.addEventListener('input', updateEffective);
+    fitSlider.addEventListener('input', updateEffective);
+    updateEffective();
+
+    const popup = document.getElementById('assign-popup');
+    const saveBtn = document.getElementById('assign-save');
+    const cancelBtn = document.getElementById('assign-cancel');
+    const projectSelect = document.getElementById('assign-project-select');
+
+    function closePopup(){
+        popup.classList.add('hidden-pop');
+        assignEmployeeId = null; 
+    }
+
+    cancelBtn.addEventListener('click', closePopup);
+
+    saveBtn.addEventListener('click', ()=>{
+        if (!assignEmployeeId){
+            return;
+        }
+            
+
+        const projectId = parseInt(projectSelect.value, 10);
+        const capacity = parseFloat(capacitySlider.value);
+        const fit = parseFloat(fitSlider.value);
+
+        const project = currentProjects.find(p => p.id === projectId);
+        if (!project){
+          return  
+        } ;
+
+        
+        const already = project.employees.some(e => e.employeeId === assignEmployeeId);
+        if (already){
+            alert('Сотрудник уже назначен на этот проект');
+            return;
+        }
+
+        project.employees.push({
+            employeeId: assignEmployeeId,
+            capacity: capacity,
+            fit: fit
+    });
+
+    saveCurrentPeriodData(currentProjects, currentEmployees);
+    renderProjectsTable(currentProjects);
+    renderEmployeesTable(currentEmployees);
+
+    closePopup();
+});
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   burgerMenu();
   selectPage();
@@ -474,5 +569,6 @@ document.addEventListener('DOMContentLoaded', function() {
     changePeriod() ;
     deleteProject();
      deleteEmployee();
-   
+     assignEmploye();
+   initAssignPopup();
 });
