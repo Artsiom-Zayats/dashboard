@@ -625,7 +625,7 @@ thead{
     margin-top: 20px;
 }
 
-#project-employees-popup {
+#project-employees-popup, #employee-assignments-popup {
     position: fixed;
     top: 0;
     left: 0;
@@ -638,7 +638,7 @@ thead{
     z-index: 1001;
 }
 
-#project-employees-popup .popup-content {
+#project-employees-popup .popup-content, #employee-assignments-popup .popup-content {
     background: white;
     border-radius: 10px;
     

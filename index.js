@@ -235,14 +235,61 @@ function renderEmployeesTable(employees){
         clone.querySelector('.employee-age').textContent = ageEmployee(employee.dateOfBirth);
         clone.querySelector('.employee-position').textContent = employee.position;
         clone.querySelector('.employee-salary').textContent = employee.salary;
-        clone.querySelector('.employee-estimated-payment').textContent = '0';
-        clone.querySelector('.projected-income').textContent = '0';
+
+        const ep = getEstimatedPayment(employee);
+        clone.querySelector('.employee-estimated-payment').textContent = ep.toLocaleString('en-US', { style: 'currency', currency: 'USD' });;
+
+
+        const pi = getProjectedIncome(employee);
+        clone.querySelector('.projected-income').textContent = pi.toLocaleString('en-US', { style: 'currency', currency: 'USD' });;
+        if(pi>=0){
+            clone.querySelector('.projected-income').classList.add('positive-estimated');
+        }else{
+            clone.querySelector('.projected-income').classList.add('negative-estimated');
+        }
 
          clone.querySelector('tr').setAttribute('data-id', employee.id);
 
          table.appendChild(clone);
     }
 
+}
+
+function getEstimatedPayment(employee){
+    let total = 0;
+    for (const project of currentProjects) {
+        for (const assignment of project.employees) {
+            if (assignment.employeeId == employee.id) {
+                total += employee.salary * Math.max(0.5, assignment.capacity);
+            }
+        }
+    }
+    if (total === 0) {
+        total = employee.salary * 0.5;
+    }
+    return total;
+}
+
+function getProjectedIncome(employee){
+    let totalProfit = 0;
+    for(const project of currentProjects){
+        const totalUsedCapacity = getEmployeeCapacity(project);
+        const capacityForRevenue = Math.max(project.employeeCapacity, totalUsedCapacity);
+        const revenuePerEffectiveCapacity = capacityForRevenue > 0 ? project.budget / capacityForRevenue : 0;
+
+        const emp = project.employees.find(e=> e.employeeId == employee.id)
+        if(emp){
+           const effective = emp.capacity * emp.fit;
+
+          const  revenue = revenuePerEffectiveCapacity * effective;
+
+          const  cost = employee.salary * Math.max(0.5, emp.capacity)
+
+           const profit = revenue - cost;
+           totalProfit += profit;
+        }
+    }
+    return totalProfit;
 }
 
 //добавление проекат из формы
@@ -695,6 +742,108 @@ function initEmployeesPopup() {
     });
 }
 
+
+function showAssignment(){
+    const tBody = document.querySelector('.employees-tbody');
+
+    tBody.addEventListener('click', (e)=>{
+        const show = e.target.closest('.show-assignments');
+        if(!show){
+            return;
+        }
+
+        const row = show.closest('tr');
+        const employeeId = row.getAttribute('data-id');
+        const employee = currentEmployees.find(e => e.id === Number(employeeId));
+        if (!employee) return;
+
+        const popup = document.getElementById('employee-assignments-popup');
+        const tBodyPop = document.getElementById('assignments-list');
+        const template = document.getElementById('assignment-row-template');
+        tBodyPop.innerHTML = '';
+
+        document.getElementById('assignments-popup-title').textContent = `Assignments for ${employee.name} ${employee.surname}`;
+
+        const assignmentsData = [];
+
+        for (const project of currentProjects){
+            const assignment = project.employees.find(a => a.employeeId == employee.id);
+
+            if(!assignment){
+                continue;
+            }
+
+            const totalUsedCapacity = getEmployeeCapacity(project);
+            const capacityForRevenue = Math.max(project.employeeCapacity, totalUsedCapacity);
+            const revenuePerEffectiveCapacity = capacityForRevenue > 0 ? project.budget / capacityForRevenue : 0;
+            const effective = assignment.capacity * assignment.fit;
+            const revenue = revenuePerEffectiveCapacity * effective;
+            const cost = employee.salary * Math.max(0.5, assignment.capacity);
+            const profit = revenue - cost;
+
+            assignmentsData.push({
+                project,
+                assignment,
+                revenue,
+                cost,
+                profit,
+                effective
+            })
+
+        }
+
+        assignmentsData.sort((a, b) => a.project.name.localeCompare(b.project.name));
+
+        if (assignmentsData.length === 0) {
+            const emptyRow = document.createElement('tr');
+            emptyRow.innerHTML = `<td colspan="9" style="text-align:center;">No assignments found</td>`;
+            tBodyPop.appendChild(emptyRow);
+        } else {
+   
+
+
+        for(const ass of assignmentsData){
+            const clone = template.content.cloneNode(true);
+            clone.querySelector('.project-name-link a').textContent = ass.project.name;
+            clone.querySelector('.assignment-capacity').textContent = ass.assignment.capacity.toFixed(2);
+            clone.querySelector('.assignment-fit').textContent = ass.assignment.fit.toFixed(2);
+            clone.querySelector('.assignment-vacation').textContent = '-';
+            clone.querySelector('.assignment-effective').textContent = ass.effective.toFixed(3);
+            clone.querySelector('.assignment-revenue').textContent = ass.revenue.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+            clone.querySelector('.assignment-cost').textContent = ass.cost.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+            clone.querySelector('.assignment-profit').textContent = ass.profit.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+
+           if (ass.profit >= 0){
+             
+                clone.querySelector('.assignment-profit').classList.add('positive-estimated');
+
+                     
+                }else {
+               
+                clone.querySelector('.assignment-profit').classList.add('negative-estimated');
+                    
+                }
+                
+
+            tBodyPop.appendChild(clone);
+        }
+        }
+        popup.classList.remove('hidden-pop');
+    })
+}
+
+function initAssignmentsPopup() {
+    const popup = document.getElementById('employee-assignments-popup');
+    const closeBtn = document.getElementById('close-assignments-popup');
+    function closePopup() {
+        popup.classList.add('hidden-pop');
+    }
+    closeBtn.addEventListener('click', closePopup);
+    popup.addEventListener('click', (e) => {
+        if (e.target === popup) closePopup();
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   burgerMenu();
   selectPage();
@@ -718,4 +867,6 @@ document.addEventListener('DOMContentLoaded', function() {
    initAssignPopup();
     showEmployees();
     initEmployeesPopup();
+    showAssignment();
+     initAssignmentsPopup();
 });

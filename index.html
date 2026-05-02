@@ -372,6 +372,48 @@
                 </div>
             </div>
         </div>
+        <div id="employee-assignments-popup" class="hidden-pop">
+            <div class="popup-content">
+                <div class="popup-header">
+                    <h3 id="assignments-popup-title">Assignments for <span>Employee</span></h3>
+                    <button class="close-popup-btn" id="close-assignments-popup">×</button>
+                </div>
+                <div class="popup-body">
+                    <table class="assignments-table">
+                        <thead>
+                            <tr>
+                                <th>Project Name</th>
+                                <th>Capacity</th>
+                                <th>Fit</th>
+                                <th>Vacation days</th>
+                                <th>Effective capacity</th>
+                                <th>Revenue</th>
+                                <th>Cost</th>
+                                <th>Profit</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assignments-list"></tbody>
+                    </table>
+                    <template id="assignment-row-template">
+                        <tr>
+                            <td class="project-name-link"><a href="#" class="project-link">-</a></td>
+                            <td class="assignment-capacity">-</td>
+                            <td class="assignment-fit">-</td>
+                            <td class="assignment-vacation">-</td>
+                            <td class="assignment-effective">-</td>
+                            <td class="assignment-revenue">-</td>
+                            <td class="assignment-cost">-</td>
+                            <td class="assignment-profit">-</td>
+                            <td>
+                                <button class="edit-assignment">Edit</button>
+                                <button class="unassign-from-employee">Unassign</button>
+                            </td>
+                        </tr>
+                    </template>
+                </div>
+            </div>
+        </div>
     </main>
     <footer></footer>
 </body>
