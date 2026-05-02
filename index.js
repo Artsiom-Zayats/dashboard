@@ -160,8 +160,20 @@ function renderProjectsTable(projects){
         clone.querySelector('.company-name').textContent = project.company;
         clone.querySelector('.project-name').textContent = project.name;
         clone.querySelector('.budget').textContent = project.budget;
-        clone.querySelector('.employee-capacity').textContent = project.employeeCapacity;
-        clone.querySelector('.estimated-income').textContent = '0';
+
+        const usedCapacity = getEmployeeCapacity(project);
+        clone.querySelector('.employee-capacity').textContent = `${usedCapacity.toFixed(2)} / ${project.employeeCapacity}`;
+        if(usedCapacity>project.employeeCapacity){
+            clone.querySelector('.employee-capacity').classList.add('attention');
+        }
+
+        const estimatedIncome = getEstimatedIncome(project);
+        clone.querySelector('.estimated-income').textContent = estimatedIncome.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        if(estimatedIncome>=0){
+            clone.querySelector('.estimated-income').classList.add('positive-estimated');
+        }else{
+            clone.querySelector('.estimated-income').classList.add('negative-estimated');
+        }
         
         clone.querySelector('tr').setAttribute('data-id', project.id);
 
@@ -171,6 +183,42 @@ function renderProjectsTable(projects){
     }
 
 }
+
+function getEstimatedIncome(project){
+    const usedCapacity = getEmployeeCapacity(project);
+    const capacityForRevenue = Math.max(usedCapacity,project.employeeCapacity);
+    if(capacityForRevenue === 0){
+        return 0;
+    }
+    const revenuePerEffectiveCapacity = project.budget/capacityForRevenue;
+    const totalRevenue = revenuePerEffectiveCapacity*usedCapacity;
+    let totalCost = 0;
+    const arrEmployees = project.employees;
+
+    for(const employee of arrEmployees){
+
+        const emp = currentEmployees.find(e=> e.id == employee.employeeId );
+       
+            if(emp){
+                totalCost +=emp.salary*Math.max(0.5, employee.capacity);
+            }
+    
+    }
+    return (totalRevenue - totalCost);
+
+}
+
+function getEmployeeCapacity(project){
+    let total = 0;
+    const arrEmployes = project.employees;
+
+    for(const employee of arrEmployes){
+        total = total + employee.capacity*employee.fit;
+    }
+
+    return total;
+}
+
 
 //заполнение таблицы сотрудников
 
@@ -429,7 +477,11 @@ function deleteEmployee(){
         }
         const row = deleteButton.closest('tr');
         const employeeId = row.getAttribute('data-id');
-
+        currentProjects.forEach(project => {
+            project.employees = project.employees.filter(assignment => 
+            assignment.employeeId != employeeId 
+            );
+        });
         const index = currentEmployees.findIndex(employee => employee.id == employeeId);
         if(index !== -1){
             currentEmployees.splice(index,1);
@@ -565,6 +617,12 @@ function showEmployees(){
         const project = currentProjects.find(p => p.id === Number(projectId));
         if (!project) return;
 
+        const totalUsedCapacity = getEmployeeCapacity(project);
+        const capacityForRevenue = Math.max(project.employeeCapacity, totalUsedCapacity);
+        let revenuePerEffectiveCapacity = 0;
+        if (capacityForRevenue > 0){
+           revenuePerEffectiveCapacity = project.budget / capacityForRevenue; 
+        } 
         
         const titleEl = document.getElementById('popup-project-title');
         titleEl.textContent = `Employees in "${project.name}"`;
@@ -597,9 +655,25 @@ function showEmployees(){
                 clone.querySelector('.emp-vacation').textContent = '-';
                 const effective = assignment.capacity * assignment.fit;
                 clone.querySelector('.emp-effective').textContent = effective.toFixed(3);
-                clone.querySelector('.emp-revenue').textContent = '0.00';
-                clone.querySelector('.emp-cost').textContent = '0.00';
-                clone.querySelector('.emp-profit').textContent = '0.00';
+
+                const employeeRevenue = revenuePerEffectiveCapacity * effective;
+                const employeeCost = employee.salary * Math.max(0.5, assignment.capacity);
+                const employeeProfit = employeeRevenue - employeeCost;
+
+                clone.querySelector('.emp-revenue').textContent = employeeRevenue.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+                clone.querySelector('.emp-cost').textContent = employeeCost.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+                clone.querySelector('.emp-profit').textContent = employeeProfit.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+
+                if (employeeProfit >= 0){
+             
+                clone.querySelector('.emp-profit').classList.add('positive-estimated');
+
+                     
+                }else {
+               
+                clone.querySelector('.emp-profit').classList.add('negative-estimated');
+                    
+                }
                 
                 tBodyEmp.appendChild(clone);
             });

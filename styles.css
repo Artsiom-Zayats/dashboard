@@ -262,6 +262,19 @@ main{
    
 }
 
+.attention{
+  color: red;
+}
+
+.positive-estimated{
+  color: green;
+}
+
+.negative-estimated{
+  color: red;
+}
+
+
 .hidden{
     display: none;
     
