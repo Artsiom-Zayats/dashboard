@@ -61,7 +61,7 @@
                                 <th class="sort" scope="col">
                                     <div class="temp">
                                         <span class="sort-name">Company Name</span>
-                                        <span class="sort-vertical"></span>
+                                        <span class="sort-vertical" id="sort-company-name"></span>
                                         <span class="filter"></span>
                                     </div>
                                     
@@ -69,21 +69,21 @@
                                 <th class="sort" scope="col">
                                      <div class="temp">
                                         <span class="sort-name">Project Name</span>
-                                        <span class="sort-vertical"></span>
+                                        <span class="sort-vertical" id="sort-project-name"></span>
                                         <span class="filter"></span>
                                     </div>
                                 </th>
                                 <th class="sort" scope="col">
                                     <div class="temp">
                                         <span class="sort-name">Budget</span>
-                                        <span class="sort-vertical"></span>
+                                        <span class="sort-vertical" id="sort-budget"></span>
                                         
                                     </div>
                                 </th>
                                 <th class="sort" scope="col">
                                     <div class="temp">
                                         <span class="sort-name">Employee Capacity</span>
-                                        <span class="sort-vertical"></span>
+                                        <span class="sort-vertical" id="sort-employee-capacity"></span>
                                         
                                     </div>
                                 </th>
@@ -93,7 +93,7 @@
                                 <th class="sort" scope="col">
                                     <div class="temp">
                                         <span class="sort-name">Estimated Income</span>
-                                        <span class="sort-vertical"></span>
+                                        <span class="sort-vertical" id="sort-estimated-income"></span>
                                         
                                     </div>
                                 </th>
@@ -118,7 +118,7 @@
                 </div>
                 <div class="add-project-side hidden-side">
                     <h3 class="project-side-header">Add New Project</h3>
-                    <form action="" class="project-side-input-form">
+                    <form class="project-side-input-form">
                         <label for="project-name" class="label-header">Project Name: *</label>
                         <input type="text" id="project-name" class="input-label">
                         <span class="error-message" id="project-name-error"></span>
@@ -201,42 +201,42 @@
                                 <th class="sort" scope="col">
                                      <div class="temp">
                                         <span class="sort-name">Name</span>
-                                        <span class="sort-vertical"></span>
+                                        <span class="sort-vertical" id="sort-employee-name"></span>
                                         <span class="filter"></span>
                                     </div>
                                 </th>
                                 <th class="sort" scope="col">
                                      <div class="temp">
                                         <span class="sort-name">Surname</span>
-                                        <span class="sort-vertical"></span>
+                                        <span class="sort-vertical" id="sort-employee-surname"></span>
                                         <span class="filter"></span>
                                     </div>
                                 </th>
                                 <th class="sort" scope="col">
                                     <div class="temp">
                                         <span class="sort-name">Age</span>
-                                        <span class="sort-vertical"></span>
+                                        <span class="sort-vertical" id="sort-employee-age"></span>
                                         
                                     </div>
                                 </th>
                                 <th class="sort" scope="col">
                                      <div class="temp">
                                         <span class="sort-name">Position</span>
-                                        <span class="sort-vertical"></span>
+                                        <span class="sort-vertical" id="sort-employee-position"></span>
                                         <span class="filter"></span>
                                     </div>
                                 </th>
                                 <th class="sort" scope="col">
                                     <div class="temp">
                                         <span class="sort-name">Salary</span>
-                                        <span class="sort-vertical"></span>
+                                        <span class="sort-vertical" id="sort-employee-salary"></span>
                                         
                                     </div>
                                 </th>
                                 <th class="sort" scope="col">
                                     <div class="temp">
                                         <span class="sort-name">Estimated Payment</span>
-                                        <span class="sort-vertical"></span>
+                                        <span class="sort-vertical" id="sort-employee-estimated-payment"></span>
                                         
                                     </div>
                                 </th>
@@ -250,7 +250,7 @@
                                 <th class="sort" scope="col">
                                     <div class="temp">
                                         <span class="sort-name">Projected Income</span>
-                                        <span class="sort-vertical"></span>
+                                        <span class="sort-vertical" id="sort-employee-projected-income"></span>
                                         
                                     </div>
                                 </th>
@@ -282,7 +282,7 @@
                 </div>
                 <div class="add-employee-side hidden-side">
                     <h3 class="employee-side-header">Add New Employee</h3>
-                    <form action="" class="employee-side-input-form">
+                    <form class="employee-side-input-form">
 
                         <label for="employee-name" class="label-header">Name: *</label>
                         <input type="text" id="employee-name" class="input-label">
@@ -335,12 +335,14 @@
                     </p>
                     <table id="seed-pop-tab">
                         <thead>
-                            <th>Year</th>
-                            <th>Month</th>
-                            <th>Projects</th>
-                            <th>Employees</th>
-                            <th>Total Est. Income</th>
-                            <th>Action</th>
+                            <tr>
+                                <th>Year</th>
+                                <th>Month</th>
+                                <th>Projects</th>
+                                <th>Employees</th>
+                                <th>Total Est. Income</th>
+                                <th>Action</th>
+                            </tr>
                         </thead>
                         <tbody></tbody>
                     </table>

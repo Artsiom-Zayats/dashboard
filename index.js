@@ -832,16 +832,196 @@ function showAssignment(){
     })
 }
 
-function initAssignmentsPopup() {
+function closeAssignmentsPopup() {
+    const closeButton = document.getElementById('close-assignments-popup');
     const popup = document.getElementById('employee-assignments-popup');
-    const closeBtn = document.getElementById('close-assignments-popup');
-    function closePopup() {
+
+    closeButton.addEventListener('click', () => {
         popup.classList.add('hidden-pop');
-    }
-    closeBtn.addEventListener('click', closePopup);
-    popup.addEventListener('click', (e) => {
-        if (e.target === popup) closePopup();
     });
+
+    popup.addEventListener('click', (e) => {
+        if (e.target === popup) {
+            popup.classList.add('hidden-pop');
+        }
+    });
+
+    document.body.classList.remove('no-scroll');
+}
+
+
+function sortProjects(){
+    const tempProjects = currentProjects;
+
+    const relation = {
+        'sort-company-name' :'company',
+
+        'sort-project-name' : 'name',
+
+        'sort-budget':'budget',
+
+        'sort-employee-capacity' :'employeeCapacity',
+
+        'sort-estimated-income': 'estimatedIncome' 
+    }
+
+
+
+}
+
+
+let currentProjectSortColumn = null;
+let currentProjectSortDirection = 'asc';
+
+
+
+function initProjectSorting(){
+    const relation = {
+        'sort-company-name' :'company',
+
+        'sort-project-name' : 'name',
+
+        'sort-budget':'budget',
+
+        'sort-employee-capacity' :'employeeCapacity',
+
+        'sort-estimated-income': 'estimatedIncome' 
+    }
+
+    const companyNameBtn = document.getElementById('sort-company-name');
+    const projectNameBtn = document.getElementById('sort-project-name');
+    const budgetBtn = document.getElementById('sort-budget');
+    const employeeCapacityBtn = document.getElementById('sort-employee-capacity');
+    const estimatedIncomeBtn = document.getElementById('sort-estimated-income');
+    
+    companyNameBtn.addEventListener('click',()=>{
+        const field = relation['sort-company-name'];
+        if(currentProjectSortColumn === field){
+            currentProjectSortDirection = currentProjectSortDirection === 'asc' ? 'desc' : 'asc';
+        }else{
+            currentProjectSortColumn = field;
+            currentProjectSortDirection = 'asc';
+        }
+        sortProjects(currentProjectSortColumn, currentProjectSortDirection);
+    })
+    projectNameBtn.addEventListener('click',()=>{
+        const field = relation['sort-project-name'];
+        if(currentProjectSortColumn === field){
+            currentProjectSortDirection = currentProjectSortDirection === 'asc' ? 'desc' : 'asc';
+        }else{
+            currentProjectSortColumn = field;
+            currentProjectSortDirection = 'asc';
+        }
+        sortProjects(currentProjectSortColumn, currentProjectSortDirection);
+    })
+    budgetBtn.addEventListener('click',()=>{
+        const field = relation['sort-budget'];
+        if(currentProjectSortColumn === field){
+            currentProjectSortDirection = currentProjectSortDirection === 'asc' ? 'desc' : 'asc';
+        }else{
+            currentProjectSortColumn = field;
+            currentProjectSortDirection = 'asc';
+        }
+        sortProjects(currentProjectSortColumn, currentProjectSortDirection);
+    })
+    employeeCapacityBtn.addEventListener('click',()=>{
+        const field = relation['sort-employee-capacity'];
+        if(currentProjectSortColumn === field){
+            currentProjectSortDirection = currentProjectSortDirection === 'asc' ? 'desc' : 'asc';
+        }else{
+            currentProjectSortColumn = field;
+            currentProjectSortDirection = 'asc';
+        }
+        sortProjects(currentProjectSortColumn, currentProjectSortDirection);
+    })
+    estimatedIncomeBtn.addEventListener('click',()=>{
+        const field = relation['sort-estimated-income'];
+        if(currentProjectSortColumn === field){
+            currentProjectSortDirection = currentProjectSortDirection === 'asc' ? 'desc' : 'asc';
+        }else{
+            currentProjectSortColumn = field;
+            currentProjectSortDirection = 'asc';
+        }
+        sortProjects(currentProjectSortColumn, currentProjectSortDirection);
+    })
+
+}
+
+let currentEmployeesSortColumn = null;
+let currentEmployeesSortDirection = 'asc';
+
+function initEmployeesSorting(){
+    const relation = {
+    'sort-employee-name': 'name',
+    'sort-employee-surname': 'surname',
+    'sort-employee-age': 'age',
+    'sort-employee-position': 'position',
+    'sort-employee-salary': 'salary',
+    'sort-employee-estimated-payment': 'estimatedPayment',
+    'sort-employee-projected-income': 'projectedIncome'
+};
+  const sortIcons = document.querySelectorAll('.employees-tab .sort-vertical');
+    sortIcons.forEach(icon => {
+        const field = relation[icon.id];
+        if (!field) return;
+        icon.addEventListener('click', () => {
+            if (currentEmployeesSortColumn === field) {
+                currentEmployeesSortDirection = currentEmployeesSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentEmployeesSortColumn = field;
+                currentEmployeesSortDirection = 'asc';
+            }
+            sortEmployees(currentEmployeesSortColumn, currentEmployeesSortDirection);
+        });
+    });
+}
+
+function sortProjects(column, direction) {
+    const sorted = [...currentProjects];
+    sorted.sort((a, b) => {
+        let aVal, bVal;
+        if (column === 'estimatedIncome') {
+            aVal = getEstimatedIncome(a);
+            bVal = getEstimatedIncome(b);
+        } else {
+            aVal = a[column];
+            bVal = b[column];
+        }
+        if (typeof aVal === 'string') {
+            return direction === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+        } else {
+            return direction === 'asc' ? aVal - bVal : bVal - aVal;
+        }
+    });
+    currentProjects = sorted;
+    renderProjectsTable(currentProjects);
+}
+
+function sortEmployees(column,direction){
+     const sorted = [...currentEmployees];
+    sorted.sort((a, b) => {
+        let aVal, bVal;
+        if (column === 'age') {
+            aVal = ageEmployee(a.dateOfBirth);
+            bVal = ageEmployee(b.dateOfBirth);
+        } else if (column === 'estimatedPayment') {
+            aVal = getEstimatedPayment(a);
+            bVal = getEstimatedPayment(b);
+        } else if (column === 'projectedIncome') {
+            aVal = getProjectedIncome(a);
+            bVal = getProjectedIncome(b);
+        } else {
+            aVal = a[column];
+            bVal = b[column];
+        }
+         if (typeof aVal === 'string') {
+            return direction === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+        } else {
+            return direction === 'asc' ? aVal - bVal : bVal - aVal;
+        }
+    });
+    currentEmployees = sorted;
+    renderEmployeesTable(currentEmployees);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -868,5 +1048,7 @@ document.addEventListener('DOMContentLoaded', function() {
     showEmployees();
     initEmployeesPopup();
     showAssignment();
-     initAssignmentsPopup();
+     closeAssignmentsPopup();
+     initProjectSorting();
+      initEmployeesSorting();
 });
